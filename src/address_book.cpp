@@ -6,8 +6,6 @@
 
 void AddressBook::add(AddressBook::Entry person)
 {
-	// Your code here
-	//
 
 	throw std::runtime_error("Not implemented");
 }
