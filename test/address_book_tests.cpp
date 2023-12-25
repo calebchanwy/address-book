@@ -135,12 +135,80 @@ TEST(AddressBookTests, FindPerson)
 	ASSERT_EQ(results[0].phone_number, "+44 7700 900297");
 }
 
-/// Add more tests here:
-/// 
-/// TEST(AddressBookTests, YOUR_TEST_NAME)
-/// {
-/// 	// Perform some test logic
-/// }
+/// Tests that entries with a partial name match are retrieved correctly.
+TEST(AddressBookTests, FindPersonalPartialMatch)
+{
+	// Populate the address book
+	AddressBook ab = AddTestPeople();
+
+	// Find a person whose name is, or starts with "Graham"
+	std::vector<AddressBook::Entry> results = ab.find("Grah");
+
+	// There should only be exactly 1 entry in the results 
+	ASSERT_EQ(results.size(), 1);
+
+	// Validate that the result is the entry we expected
+	ASSERT_EQ(results[0].first_name, "Sally");
+	ASSERT_EQ(results[0].last_name, "Graham");
+	ASSERT_EQ(results[0].phone_number, "+44 7700 900297");
+}
+
+/// Tests that retrieving entries are not case sensitive.
+TEST(AddressBookTests, FindPersonCaseInsensitive)
+{
+	// Populate the address book
+	AddressBook ab = AddTestPeople();
+
+	// Find a person whose name is, or starts with "AARAN"
+	std::vector<AddressBook::Entry> resultsUppercase = ab.find("AARAN");
+	// Find a person whose name is, or starts with "aaran"
+	std::vector<AddressBook::Entry> resultsLowercase = ab.find("aaran");
+
+	// There should only be exactly 1 entry in both resuts
+	ASSERT_EQ(resultsUppercase.size(), 1);
+	ASSERT_EQ(resultsLowercase.size(), 1);
+
+	// Validate that both the lowercase and uppercase results are the same entry
+	ASSERT_EQ(resultsUppercase[0].first_name, resultsLowercase[0].first_name);
+	ASSERT_EQ(resultsUppercase[0].last_name, resultsLowercase[0].last_name);
+	ASSERT_EQ(resultsLowercase[0].phone_number, resultsLowercase[0].phone_number);
+}
+
+/// Tests that it is possible to remove a person from the address book
+TEST(AddressBookTests, RemovePerson){
+
+	// Populate the address book
+	AddressBook ab = AddTestPeople();
+	
+	// Sort by last names
+	std::vector<AddressBook::Entry> results = ab.sortedByLastName();
+
+	// There should already be 6 existing entries in the results 
+	ASSERT_EQ(results.size(), 6);
+
+	// Save first two entries of results
+	AddressBook::Entry person1 = results[0];
+	AddressBook::Entry person2 = results[1];
+
+	// Remove first two entries in results
+	ab.remove(person1);
+	ab.remove(person2);
+
+	// Sort by last names
+	std::vector<AddressBook::Entry> resultsRemoved = ab.sortedByLastName();
+
+	// There should now only be 4 entries in the address book. having removed two entrries
+	ASSERT_EQ(results.size(), 4);
+
+	// Attempting to retrieve entries of persons removed
+	std::vector<AddressBook::Entry> query1 = ab.find(person1.first_name);
+	std::vector<AddressBook::Entry> query2 = ab.find(person2.first_name);
+
+	// There should be 0 entries retrieved for each query
+	ASSERT_EQ(query1.size(), 0);
+	ASSERT_EQ(query2.size(), 0);
+
+}
 
 
 
