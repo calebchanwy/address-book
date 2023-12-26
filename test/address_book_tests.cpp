@@ -198,7 +198,7 @@ TEST(AddressBookTests, RemovePerson){
 	std::vector<AddressBook::Entry> resultsRemoved = ab.sortedByLastName();
 
 	// There should now only be 4 entries in the address book. having removed two entrries
-	ASSERT_EQ(results.size(), 4);
+	ASSERT_EQ(resultsRemoved.size(), 4);
 
 	// Attempting to retrieve entries of persons removed
 	std::vector<AddressBook::Entry> query1 = ab.find(person1.first_name);
