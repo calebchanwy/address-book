@@ -75,7 +75,7 @@ TEST(AddressBookTests, SortedByFirstNames)
 	{
 		auto personResult = results[i];
 		auto personAnswer = people_sortedFirstNames[i];
-
+ 
 		ASSERT_EQ(personResult.first_name, personAnswer[0]);
 		ASSERT_EQ(personResult.last_name, personAnswer[1]);
 		ASSERT_EQ(personResult.phone_number, personAnswer[2]);
@@ -135,6 +135,30 @@ TEST(AddressBookTests, FindPerson)
 	ASSERT_EQ(results[0].phone_number, "+44 7700 900297");
 }
 
+/// Tests that an entry can be found in the address book.
+TEST(AddressBookTests, FindMultiplePeople)
+{
+	// Populate the address book
+	AddressBook ab = AddTestPeople();
+
+	// Add a person who has a first name Graham, but last name Johnson
+	ab.add(AddressBook::Entry({"Graham","Johnson",""}));
+
+	// Find a person whose name is, or starts with "Graham"
+	std::vector<AddressBook::Entry> results = ab.find("Graham");
+
+	// There should only be exactly 2 entries in the results 
+	ASSERT_EQ(results.size(), 2);
+
+	// Validate that the result is the entries we expect
+	ASSERT_EQ(results[0].first_name, "Graham");
+	ASSERT_EQ(results[0].last_name, "Johnson");
+	ASSERT_EQ(results[0].phone_number, "+44 7700 900297");
+	ASSERT_EQ(results[1].first_name, "Sally");
+	ASSERT_EQ(results[1].last_name, "Graham");
+	ASSERT_EQ(results[1].phone_number, "+44 7700 900297");
+}
+
 /// Tests that entries with a partial name match are retrieved correctly.
 TEST(AddressBookTests, FindPersonalPartialMatch)
 {
@@ -173,6 +197,7 @@ TEST(AddressBookTests, FindPersonCaseInsensitive)
 	ASSERT_EQ(resultsUppercase[0].last_name, resultsLowercase[0].last_name);
 	ASSERT_EQ(resultsLowercase[0].phone_number, resultsLowercase[0].phone_number);
 }
+
 
 /// Tests that it is possible to remove a person from the address book
 TEST(AddressBookTests, RemovePerson){
