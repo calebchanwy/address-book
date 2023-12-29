@@ -64,8 +64,8 @@ void AddressBook::add(AddressBook::Entry person)
 	std::vector<AddressBook::Entry> query_last_name = find(person.last_name);
 
 
-	if (std::find(query_first_name.begin(),query_first_name.end(),person) == query_first_name.end() && 
-		std::find(query_last_name.begin(),query_last_name.end(),person) == query_last_name.end()
+	if (std::find(query_first_name.begin(),query_first_name.end(),person) != query_first_name.end() && 
+		std::find(query_last_name.begin(),query_last_name.end(),person) != query_last_name.end()
 	)
 	{
 		// If an identical person is in lookup maps, do not add the person.
