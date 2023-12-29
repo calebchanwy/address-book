@@ -59,9 +59,6 @@ void removeFromMap(char first_char, std::map<char, std::vector<AddressBook::Entr
 // Method to add a person entry into the address book.
 void AddressBook::add(AddressBook::Entry person)
 {
-	// Add person to entries vector.
-	entries.push_back(person);
-
 	// Add person to lookup maps
 	addToMap(person.first_name[0],first_name_lookup_map,person);
 	addToMap(person.last_name[0],last_name_lookup_map,person);
@@ -72,19 +69,6 @@ void AddressBook::add(AddressBook::Entry person)
 // Method to remove a person entry from the address book.
 void AddressBook::remove(AddressBook::Entry person)
 {
-	// Check if person is in address book
-	auto it = std::find(entries.begin(), entries.end(), person);
-
-	if (it!=entries.end())
-	{
-		// Entry in address book, safely remove.
-		entries.erase(it);
-	}
-	else
-	{
-		// Entry not in address book, do nothing.
-	}
-
 	// Remove from lookup maps
 	removeFromMap(person.first_name[0],first_name_lookup_map,person);
 	removeFromMap(person.last_name[0],last_name_lookup_map,person);

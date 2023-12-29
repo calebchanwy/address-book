@@ -50,9 +50,6 @@ public:
 
 private:
 
-	// Vector containing all people entries in the address book.
-	std::vector<Entry> entries;
-
 	// Lookup map, grouping entries by first character of the first name.
 	std::map<char, std::vector<Entry>> first_name_lookup_map;
 
