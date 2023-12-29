@@ -176,6 +176,8 @@ std::vector<AddressBook::Entry> AddressBook::find(const std::string &name)
 	std::vector<AddressBook::Entry> last_name_matching_first_char= findEntryInMap(sanitised_name[0],last_name_lookup_map,sanitised_name);
 	query_entries.insert(query_entries.end(),first_name_matching_first_char.begin(),first_name_matching_first_char.end());
 	query_entries.insert(query_entries.end(),last_name_matching_first_char.begin(),last_name_matching_first_char.end());
-	
+	std::sort(query_entries.begin(),query_entries.end());
+	auto duplicates = std::unique(query_entries.begin(),query_entries.end());
+	query_entries.erase(duplicates,query_entries.end());
 	return query_entries;
 }

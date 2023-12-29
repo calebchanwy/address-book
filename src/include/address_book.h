@@ -23,6 +23,14 @@ public:
 			return this->first_name == other.first_name && this->last_name == other.last_name && this->phone_number == other.phone_number;
 		}
 
+		// Add custom < operator, comparing two entries for sorting purposes
+		bool operator<(const Entry &other) const
+		{
+			// If all fields of the entry object are equal to each other, must be equal.
+			return this->first_name <= other.first_name && this->last_name <= other.last_name;
+		}
+
+
 		// Overload << operator for string representation for debugging purposes.
 		friend std::ostream& operator<<(std::ostream& os, const Entry& obj) {
 			os << "Entry | ";
