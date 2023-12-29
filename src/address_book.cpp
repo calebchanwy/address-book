@@ -21,9 +21,8 @@ void addToMap(char first_char, std::map<char, std::vector<AddressBook::Entry>> &
 	else
 	{
 		// A vector of entries does not exist for the first character.
-		// Create new vector of entries, starting with current entry
-		std::vector<AddressBook::Entry> entries = {person};
-		map.insert({first_char,entries});
+		// Create new vector of entries, starting with current entry and add to map
+		map.emplace(first_char,std::vector<AddressBook::Entry>{person});
 	}
 }
 
@@ -174,10 +173,15 @@ std::vector<AddressBook::Entry> AddressBook::find(const std::string &name)
 
 	std::vector<AddressBook::Entry> first_name_matching_first_char= findEntryInMap(sanitised_name[0],first_name_lookup_map,sanitised_name);
 	std::vector<AddressBook::Entry> last_name_matching_first_char= findEntryInMap(sanitised_name[0],last_name_lookup_map,sanitised_name);
+
+	// Combine entries into single query.
 	query_entries.insert(query_entries.end(),first_name_matching_first_char.begin(),first_name_matching_first_char.end());
 	query_entries.insert(query_entries.end(),last_name_matching_first_char.begin(),last_name_matching_first_char.end());
+
+	// Remove duplicate entries from query.
 	std::sort(query_entries.begin(),query_entries.end());
 	auto duplicates = std::unique(query_entries.begin(),query_entries.end());
 	query_entries.erase(duplicates,query_entries.end());
+	
 	return query_entries;
 }

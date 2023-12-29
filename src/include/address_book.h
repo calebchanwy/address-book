@@ -26,7 +26,7 @@ public:
 		// Add custom < operator, comparing two entries for sorting purposes
 		bool operator<(const Entry &other) const
 		{
-			// If all fields of the entry object are equal to each other, must be equal.
+			// One entry is < another by their first name and last name.
 			return this->first_name <= other.first_name && this->last_name <= other.last_name;
 		}
 
