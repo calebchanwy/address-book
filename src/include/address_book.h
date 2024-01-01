@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <iostream>
 
 /// The main Address Book implementation. Extend as required.
@@ -58,9 +58,9 @@ public:
 private:
 
 	// Lookup map, grouping entries by first character of the first name.
-	std::map<char, std::vector<Entry>> first_name_lookup_map;
+	std::unordered_map<char, std::vector<Entry>> first_name_lookup_map;
 
 	// Lookup map, grouping entries by first character of the last name.
-	std::map<char, std::vector<Entry>> last_name_lookup_map;
+	std::unordered_map<char, std::vector<Entry>> last_name_lookup_map;
 
 };

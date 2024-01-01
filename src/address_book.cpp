@@ -6,9 +6,10 @@
 #include <algorithm>
 #include <functional>
 #include <set>
+#include <unordered_map>
 
 // Method that adds Entry person to a given map
-void addToMap(char first_char, std::map<char, std::vector<AddressBook::Entry>> &map, const AddressBook::Entry &person)
+void addToMap(char first_char, std::unordered_map<char, std::vector<AddressBook::Entry>> &map, const AddressBook::Entry &person)
 {
 	// Check if the first character in map.
 	auto it = map.find(first_char);
@@ -28,7 +29,7 @@ void addToMap(char first_char, std::map<char, std::vector<AddressBook::Entry>> &
 
 
 // Method that removes an Entry person to a given map
-void removeFromMap(char first_char, std::map<char, std::vector<AddressBook::Entry>> & map, const AddressBook::Entry& person)
+void removeFromMap(char first_char, std::unordered_map<char, std::vector<AddressBook::Entry>> & map, const AddressBook::Entry& person)
 {
 	// Check if the first character in map.
 	auto it = map.find(first_char);
@@ -101,16 +102,20 @@ bool compareEntriesLastName(const AddressBook::Entry &entry1, const AddressBook:
 }
 
 // Function that sorts a given map of entries by a given field, returning the final sorted vector.
-std::vector<AddressBook::Entry> sortEntriesByField(std::map<char, std::vector<AddressBook::Entry>>& entriesMap, std::function<bool(const AddressBook::Entry&, const AddressBook::Entry&)> comparator)
+std::vector<AddressBook::Entry> sortEntriesByField(std::unordered_map<char, std::vector<AddressBook::Entry>>& entries_map, std::function<bool(const AddressBook::Entry&, const AddressBook::Entry&)> comparator)
 {
-    std::vector<AddressBook::Entry> sortedEntries;
-    for (auto& entryPair : entriesMap)
+    std::vector<AddressBook::Entry> sorted_entries;
+
+	// For each entry pair in the map, insert entries to sroted entries
+    for (const auto &entry_pair : entries_map)
     {
-        auto& charEntries = entryPair.second;
-        std::sort(charEntries.begin(), charEntries.end(), comparator);
-        sortedEntries.insert(sortedEntries.end(), charEntries.begin(), charEntries.end());
+        auto &char_entries = entry_pair.second;
+        sorted_entries.insert(sorted_entries.end(), char_entries.begin(), char_entries.end());
     }
-    return sortedEntries;
+
+	// Using given comparator, sort the vector.
+	std::sort(sorted_entries.begin(),sorted_entries.end(),comparator);
+    return sorted_entries;
 }
 
 // Function that returns a vector of entries, sorted by the first name.
@@ -129,7 +134,7 @@ std::vector<AddressBook::Entry> AddressBook::sortedByLastName()
 std::string toUpper(const std::string &str)
 {
 	std::string result;
-	for (char c : str)
+	for (const char &c : str)
 	{
 		result += std::toupper(c);
 	}
@@ -137,7 +142,7 @@ std::string toUpper(const std::string &str)
 }
 
 // Helper function to find matching entries in a lookup map and insert into a given set.
-void findAndInsertEntries(const char &first_char, const std::map<char, std::vector<AddressBook::Entry>> &entries_map, const std::string &value, std::set<AddressBook::Entry> &query_entries)
+void findAndInsertEntries(const char &first_char, const std::unordered_map<char, std::vector<AddressBook::Entry>> &entries_map, const std::string &value, std::set<AddressBook::Entry> &query_entries)
 {	
 	// Sanitise given value to all upper case.
 	std::string sanitised_value = toUpper(value);
