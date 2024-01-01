@@ -289,6 +289,24 @@ TEST(AddressBookTests, RemovePerson){
 
 }
 
+/// Tests that attempting to remove a person not in the address book has no effect.
+TEST(AddressBookTests, RemoveNonexistentPerson)
+{
+    AddressBook ab = AddTestPeople();
+
+    // Create an entry that is not in the address book
+    AddressBook::Entry nonexistentPerson = {"John", "Doe", "123456789"};
+
+    // Attempt to remove the nonexistent person
+    ab.remove(nonexistentPerson);
+
+    // Get the contents of the address book.
+    std::vector<AddressBook::Entry> results = ab.sortedByLastName();
+
+    // The address book should remain unchanged.
+    ASSERT_EQ(results.size(), 6);
+}
+
 
 
 int main(int argc, char** argv)
