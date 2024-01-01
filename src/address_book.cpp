@@ -136,33 +136,26 @@ std::string toUpper(const std::string &str)
 	return result;
 }
 
-std::vector<AddressBook::Entry> findEntryInMap(char first_char, std::map<char, std::vector<AddressBook::Entry>> &map, const std::string &value)
-{
-	// Initialise vector to store resulting matching entries.
-	std::vector<AddressBook::Entry> query_entries;
+// Helper function to find matching entries in a lookup map and insert into a given set.
+void findAndInsertEntries(const char &first_char, const std::map<char, std::vector<AddressBook::Entry>> &entries_map, const std::string &value, std::set<AddressBook::Entry> &query_entries)
+{	
+	// Sanitise given value to all upper case.
+	std::string sanitised_value = toUpper(value);
 
 	// Check if character in map
-	auto it = map.find(first_char);
-	if (it!=map.end())
+	auto it = entries_map.find(toupper(first_char));
+	if (it!=entries_map.end())
 	{
 		// If character is present in map, get existing entries.
-		std::vector<AddressBook::Entry> &entries_matching_char = it->second;
-		for (auto &entry : entries_matching_char)
+		std::vector<AddressBook::Entry> entries_matching_char = it->second;
+		for (const auto &entry : entries_matching_char)
 		{
-			if (toUpper(entry.first_name).find(value) != std::string::npos || toUpper(entry.last_name).find(value) != std::string::npos)
+			if (toUpper(entry.first_name).find(sanitised_value) != std::string::npos || toUpper(entry.last_name).find(sanitised_value) != std::string::npos)
 			{
 				// If entry partially matches or completely matches in the first name/last name, add to query.
-				query_entries.push_back(entry);
+				query_entries.insert(entry);
 			}
 		}
-
-		// Return query.
-		return query_entries;
-	}
-	else
-	{
-		// Character not in map, return empty query.
-		return query_entries;
 	}
 }
 
@@ -170,23 +163,11 @@ std::vector<AddressBook::Entry> findEntryInMap(char first_char, std::map<char, s
 std::vector<AddressBook::Entry> AddressBook::find(const std::string &name)
 {
 	// Initialise vector to store resulting matching entries.
-	std::vector<AddressBook::Entry> query_entries;
+	std::set<AddressBook::Entry> query_entries;
 
-	// Sanitise given name to all upper case.
-	std::string sanitised_name = toUpper(name);
+	// For each lookup map, find insert matching entries to query_entries set.
+	findAndInsertEntries(name[0],first_name_lookup_map,name,query_entries);
+	findAndInsertEntries(name[0],last_name_lookup_map,name,query_entries);
 
-	// For each lookup map, find matching entries.
-	std::vector<AddressBook::Entry> first_name_matching_first_char= findEntryInMap(sanitised_name[0],first_name_lookup_map,sanitised_name);
-	std::vector<AddressBook::Entry> last_name_matching_first_char= findEntryInMap(sanitised_name[0],last_name_lookup_map,sanitised_name);
-
-	// Combine entries into single query vector.
-	query_entries.insert(query_entries.end(),first_name_matching_first_char.begin(),first_name_matching_first_char.end());
-	query_entries.insert(query_entries.end(),last_name_matching_first_char.begin(),last_name_matching_first_char.end());
-
-	// Remove duplicate entries from query vector.
-	std::sort(query_entries.begin(),query_entries.end());
-	auto duplicates = std::unique(query_entries.begin(),query_entries.end());
-	query_entries.erase(duplicates,query_entries.end());
-	
-	return query_entries;
+	return {query_entries.begin(),query_entries.end()};
 }

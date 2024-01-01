@@ -27,9 +27,8 @@ public:
 		bool operator<(const Entry &other) const
 		{
 			// One entry is < another by their first name and last name.
-			return this->first_name <= other.first_name && this->last_name <= other.last_name;
+			return this->first_name < other.first_name;
 		}
-
 
 		// Overload << operator for string representation for debugging purposes.
 		friend std::ostream& operator<<(std::ostream& os, const Entry& obj) {

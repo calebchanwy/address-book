@@ -290,7 +290,7 @@ TEST(AddressBookTests, RemovePerson){
 }
 
 /// Tests that attempting to remove a person not in the address book has no effect.
-TEST(AddressBookTests, RemoveNonexistentPerson)
+TEST(AddressBookTests, RemoveNonExistentPerson)
 {
     AddressBook ab = AddTestPeople();
 
