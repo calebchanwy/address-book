@@ -16,7 +16,7 @@ void addToMap(char first_char, std::map<char, std::vector<AddressBook::Entry>> &
 	{
 		// A vector of entries already exists for the first character.
 		// Add current person to vector
-		it->second.push_back(person);
+		it->second.emplace_back(person);
 	} 
 	else
 	{
@@ -145,14 +145,18 @@ std::vector<AddressBook::Entry> findEntryInMap(char first_char, std::map<char, s
 	auto it = map.find(first_char);
 	if (it!=map.end())
 	{
+		// If character is present in map, get existing entries.
 		std::vector<AddressBook::Entry> &entries_matching_char = it->second;
 		for (auto &entry : entries_matching_char)
 		{
-			if (toUpper(entry.first_name).find(value) != std::string::npos || toUpper(entry.last_name).find(value) != std::string::npos || entry.phone_number.find(value)!= std::string::npos )
+			if (toUpper(entry.first_name).find(value) != std::string::npos || toUpper(entry.last_name).find(value) != std::string::npos)
 			{
+				// If entry partially matches or completely matches in the first name/last name, add to query.
 				query_entries.push_back(entry);
 			}
 		}
+
+		// Return query.
 		return query_entries;
 	}
 	else
@@ -171,14 +175,15 @@ std::vector<AddressBook::Entry> AddressBook::find(const std::string &name)
 	// Sanitise given name to all upper case.
 	std::string sanitised_name = toUpper(name);
 
+	// For each lookup map, find matching entries.
 	std::vector<AddressBook::Entry> first_name_matching_first_char= findEntryInMap(sanitised_name[0],first_name_lookup_map,sanitised_name);
 	std::vector<AddressBook::Entry> last_name_matching_first_char= findEntryInMap(sanitised_name[0],last_name_lookup_map,sanitised_name);
 
-	// Combine entries into single query.
+	// Combine entries into single query vector.
 	query_entries.insert(query_entries.end(),first_name_matching_first_char.begin(),first_name_matching_first_char.end());
 	query_entries.insert(query_entries.end(),last_name_matching_first_char.begin(),last_name_matching_first_char.end());
 
-	// Remove duplicate entries from query.
+	// Remove duplicate entries from query vector.
 	std::sort(query_entries.begin(),query_entries.end());
 	auto duplicates = std::unique(query_entries.begin(),query_entries.end());
 	query_entries.erase(duplicates,query_entries.end());
