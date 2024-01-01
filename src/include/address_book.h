@@ -57,6 +57,21 @@ public:
 
 private:
 
+	/**
+	 * In order to aid the retrieval of entries for extremely large amounts of entries, I have
+	 * implemented a lookup map, relating first character of person's last/first name to a list
+	 * (vector) of entries.
+	 * 
+	 * This solution is efficient, when names are evenly spread accross characters. However,
+	 * in reality it is often the case that certain characters are more popular, such as A, when
+	 * compared to names beginning with X.
+	 * 
+	 * If I had more time, this can be refactored to use a indexing table, which would evenly
+	 * split entries by their index, and easily retireved using a binary table. Moreover, I would
+	 * look into refactoring the maps to improve scalability when adding more fields which can
+	 * be searched, as adding a new lookup map requries changes in multiple functions.
+	*/
+
 	// Lookup map, grouping entries by first character of the first name.
 	std::unordered_map<char, std::vector<Entry>> first_name_lookup_map;
 
