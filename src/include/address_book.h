@@ -31,7 +31,7 @@ public:
 			return this->first_name < other.first_name || this->last_name < other.last_name;
 		}
 
-		// Overload << operator for string representation for debugging purposes.
+		// Add custom << operator for string representation for debugging purposes.
 		friend std::ostream& operator<<(std::ostream& os, const Entry& obj) {
 			os << "Entry | ";
 			os << "First Name: " << obj.first_name << ", ";
@@ -60,8 +60,8 @@ private:
 
 	/**
 	 * In order to aid the retrieval of entries for extremely large amounts of entries, I have
-	 * implemented a lookup map, relating first character of person's last/first name to a list
-	 * (vector) of entries.
+	 * implemented a lookup map, relating first character of person's last/first name to a set
+	 * of entries
 	 * 
 	 * This solution is efficient, when names are evenly spread accross characters. However,
 	 * in reality it is often the case that certain characters are more popular, such as A, when
