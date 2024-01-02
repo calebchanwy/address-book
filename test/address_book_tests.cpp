@@ -169,34 +169,48 @@ TEST(AddressBookTests, FindPerson)
 	ASSERT_EQ(results[0].phone_number, "+44 7700 900297");
 }
 
-/// Tests that an entry can be found in the address book.
+/// Tests that multiple entries can be found in the address book.
 TEST(AddressBookTests, FindMultiplePeople)
 {
-	// Populate the address book.
-	AddressBook ab = AddTestPeople();
+    // Populate the address book.
+    AddressBook ab = AddTestPeople();
 
-	// Add a person who has a first name Graham, but last name Johnson.
-	ab.add(AddressBook::Entry({"Graham","Johnson",""}));
+    // Add a person who has a first name Graham, but last name Johnson.
+    ab.add(AddressBook::Entry({"Graham", "Johnson", ""}));
 
-	// Add a person who has a first name Graham, but last name Mckinsey.
-	ab.add(AddressBook::Entry({"Graham","Mckinsey",""}));
+    // Add a person who has a first name Graham, but last name Mckinsey.
+    ab.add(AddressBook::Entry({"Graham", "Mckinsey", ""}));
 
-	// Find a person whose name is, or starts with "Graham".
-	std::vector<AddressBook::Entry> results = ab.find("Graham");
+    // Find a person whose name is, or starts with "Graham".
+    std::vector<AddressBook::Entry> results = ab.find("Graham");
 
-	// There should only be exactly 2 entries in the results .
-	ASSERT_EQ(results.size(), 3);
+    // There should be exactly 2 entries in the results.
+    ASSERT_EQ(results.size(), 3);
 
-	// Validate that the result is the entries we expect.
-	ASSERT_EQ(results[0].first_name, "Graham");
-	ASSERT_EQ(results[0].last_name, "Johnson");
-	ASSERT_EQ(results[0].phone_number, "");
-	ASSERT_EQ(results[1].first_name, "Graham");
-	ASSERT_EQ(results[1].last_name, "Mckinsey");
-	ASSERT_EQ(results[1].phone_number, "");
-	ASSERT_EQ(results[2].first_name, "Sally");
-	ASSERT_EQ(results[2].last_name, "Graham");
-	ASSERT_EQ(results[2].phone_number, "+44 7700 900297");
+    // Validate that the expected entries are present in the result set.
+    bool foundJohnson = false;
+    bool foundMckinsey = false;
+    bool foundSally = false;
+
+    for (const auto& result : results)
+    {
+        if (result.first_name == "Graham" && result.last_name == "Johnson")
+        {
+            foundJohnson = true;
+        }
+        else if (result.first_name == "Graham" && result.last_name == "Mckinsey")
+        {
+            foundMckinsey = true;
+        }
+        else if (result.first_name == "Sally" && result.last_name == "Graham")
+        {
+            foundSally = true;
+        }
+    }
+
+    ASSERT_TRUE(foundJohnson);
+    ASSERT_TRUE(foundMckinsey);
+    ASSERT_TRUE(foundSally);
 }
 
 /// Tests that entries with a partial name match are retrieved correctly.

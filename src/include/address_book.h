@@ -2,8 +2,9 @@
 
 #include <string>
 #include <vector>
-#include <unordered_map>
+#include <map>
 #include <iostream>
+#include <set>
 
 /// The main Address Book implementation. Extend as required.
 class AddressBook
@@ -27,7 +28,7 @@ public:
 		bool operator<(const Entry &other) const
 		{
 			// One entry is < another by their first name and last name.
-			return this->first_name < other.first_name;
+			return this->first_name < other.first_name || this->last_name < other.last_name;
 		}
 
 		// Overload << operator for string representation for debugging purposes.
@@ -73,9 +74,9 @@ private:
 	*/
 
 	// Lookup map, grouping entries by first character of the first name.
-	std::unordered_map<char, std::vector<Entry>> first_name_lookup_map;
+	std::map<char, std::set<Entry>> first_name_lookup_map;
 
 	// Lookup map, grouping entries by first character of the last name.
-	std::unordered_map<char, std::vector<Entry>> last_name_lookup_map;
+	std::map<char, std::set<Entry,std::less<Entry>>> last_name_lookup_map;
 
 };
