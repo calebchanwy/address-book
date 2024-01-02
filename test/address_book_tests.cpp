@@ -178,19 +178,25 @@ TEST(AddressBookTests, FindMultiplePeople)
 	// Add a person who has a first name Graham, but last name Johnson.
 	ab.add(AddressBook::Entry({"Graham","Johnson",""}));
 
+	// Add a person who has a first name Graham, but last name Mckinsey.
+	ab.add(AddressBook::Entry({"Graham","Mckinsey",""}));
+
 	// Find a person whose name is, or starts with "Graham".
 	std::vector<AddressBook::Entry> results = ab.find("Graham");
 
 	// There should only be exactly 2 entries in the results .
-	ASSERT_EQ(results.size(), 2);
+	ASSERT_EQ(results.size(), 3);
 
 	// Validate that the result is the entries we expect.
 	ASSERT_EQ(results[0].first_name, "Graham");
 	ASSERT_EQ(results[0].last_name, "Johnson");
 	ASSERT_EQ(results[0].phone_number, "");
-	ASSERT_EQ(results[1].first_name, "Sally");
-	ASSERT_EQ(results[1].last_name, "Graham");
-	ASSERT_EQ(results[1].phone_number, "+44 7700 900297");
+	ASSERT_EQ(results[1].first_name, "Graham");
+	ASSERT_EQ(results[1].last_name, "Mckinsey");
+	ASSERT_EQ(results[1].phone_number, "");
+	ASSERT_EQ(results[2].first_name, "Sally");
+	ASSERT_EQ(results[2].last_name, "Graham");
+	ASSERT_EQ(results[2].phone_number, "+44 7700 900297");
 }
 
 /// Tests that entries with a partial name match are retrieved correctly.
