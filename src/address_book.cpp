@@ -39,16 +39,7 @@ void removeFromMap(char first_char, std::map<char, std::set<AddressBook::Entry>>
 	{
 		// Remove person from existing set
 		std::set<AddressBook::Entry> &entries_at_char = it->second;
-		auto it_person = std::find(entries_at_char.begin(),entries_at_char.end(),person);
-		if (it_person!=entries_at_char.end())
-		{
-			// Remove person from set
-			entries_at_char.erase(it_person);
-		}
-		else{
-			// Person not found at set for this character
-			// Do nothing
-		}
+		entries_at_char.erase(person);
 	} 
 	else
 	{
@@ -117,6 +108,8 @@ std::vector<AddressBook::Entry> AddressBook::sortedByLastName()
 std::string toUpper(const std::string &str)
 {
     std::string result(str);
+	
+	// Use transform lambda function to apply toupper to each char.
     std::transform(result.begin(), result.end(), result.begin(), [](unsigned char c) { return std::toupper(c); });
     return result;
 }

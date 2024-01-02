@@ -169,6 +169,19 @@ TEST(AddressBookTests, FindPerson)
 	ASSERT_EQ(results[0].phone_number, "+44 7700 900297");
 }
 
+/// Tests that a nonexistent person cannot be found.
+TEST(AddressBookTests, FindNonExistentPerson)
+{
+	// Populate the address book.
+	AddressBook ab = AddTestPeople();
+
+	// Find a person whose name is, or starts with "Karkoff"
+	std::vector<AddressBook::Entry> results = ab.find("Karkoff");
+
+	// There should only be exactly 0 entries in the results.
+	ASSERT_EQ(results.size(), 0);
+}
+
 /// Tests that multiple entries can be found in the address book.
 TEST(AddressBookTests, FindMultiplePeople)
 {
