@@ -27,16 +27,16 @@ public:
 		// Add custom < operator, comparing two entries for sorting purposes
 		bool operator<(const Entry &other) const
 		{
-			// One entry is < another by their first name and last name.
+			// One entry is < another by their first name or last name.
 			return this->first_name < other.first_name || this->last_name < other.last_name;
 		}
 
 		// Add custom << operator for string representation for debugging purposes.
 		friend std::ostream& operator<<(std::ostream& os, const Entry& obj) {
 			os << "Entry | ";
-			os << "First Name: " << obj.first_name << ", ";
-			os << "Last Name: " << obj.last_name << ", ";
-			os << "Phone Number: " << obj.phone_number;
+			os << obj.first_name << ", ";
+			os << obj.last_name << ", ";
+			os << "No: " << obj.phone_number;
 			return os;
 		}
 	};
@@ -77,6 +77,6 @@ private:
 	std::map<char, std::set<Entry>> first_name_lookup_map;
 
 	// Lookup map, grouping entries by first character of the last name.
-	std::map<char, std::set<Entry,std::less<Entry>>> last_name_lookup_map;
+	std::map<char, std::set<Entry>> last_name_lookup_map;
 
 };
